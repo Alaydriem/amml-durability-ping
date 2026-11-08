@@ -56,12 +56,6 @@ mise run package
 mise run test
 ```
 
-`mise run package` writes `dist/@amml/durability-ping/` (`amml_durability_ping.dll`, `amml.hcl` and `icon.png`). `mise run install [--instance <name>]` runs `package`, then copies it into `%LOCALAPPDATA%\amml\instances\<name>\mods\amml\@amml\durability-ping\` (default instance `1.26.62.01-durability-ping`). Close the game first.
-
-For tests in the game, use a dedicated instance, not your normal one. `mise run make-instance` makes `1.26.62.01-durability-ping` as a copy of `1.26.62.01` (the source is not changed; `--refresh` rebuilds only the loader and recipes). `mise run ingame` installs into it, starts the game, waits for `@amml/durability-ping enabled`, checks the log and ends the game it started.
-
-The game functions the mod reads and hooks are found by AMML recipes in the `amml` repository (`recipes/`).
-
 ## License
 
 BSD 3-Clause. Copyright (c) 2026 Charles R. Portwood II. See [LICENSE](./LICENSE).
