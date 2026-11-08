@@ -1,0 +1,144 @@
+[tasks.preflight]
+description = "Names a missing toolchain or tool before a build turns it into an obscure error"
+dir = "{{config_root}}"
+run = [
+  "rustc --version",
+  "cargo --version",
+  "cargo nextest --version",
+]
+
+[tasks.check]
+description = "Compiles, runs clippy with warnings denied and checks formatting"
+dir = "{{config_root}}"
+run = [
+  "cargo check --workspace --all-targets",
+  "cargo clippy --workspace --all-targets -- -D warnings",
+  "cargo fmt --all --check",
+]
+
+[tasks.test]
+description = "Every test through cargo nextest run"
+dir = "{{config_root}}"
+run = "cargo nextest run --workspace"
+
+[tasks.package]
+description = "Builds dist/@amml/durability-ping/ (amml_durability_ping.dll, amml.hcl, icon.png), the release artifact"
+dir = "{{config_root}}"
+shell = "bash -c"
+run = '''
+set -e
+cargo build --release -p durability-ping-amml
+rm -rf dist/@amml/durability-ping
+mkdir -p dist/@amml/durability-ping
+cp target/release/amml_durability_ping.dll dist/@amml/durability-ping/amml_durability_ping.dll
+cp durability-ping/amml/amml.hcl dist/@amml/durability-ping/amml.hcl
+cp durability-ping/amml/icon.png dist/@amml/durability-ping/icon.png
+echo "built dist/@amml/durability-ping"
+'''
+
+[tasks.install]
+description = "Runs package, then copies dist/@amml/durability-ping into mods/amml/@amml/durability-ping of an AMML instance under %LOCALAPPDATA%/amml/instances (--instance, default 1.26.62.01-durability-ping). The mod's config/ stays. Close the game first: a running game locks the DLL"
+depends = ["package"]
+dir = "{{config_root}}"
+shell = "bash -c"
+usage = '''
+flag "--instance <name>" default="1.26.62.01-durability-ping" help="The instance folder under %LOCALAPPDATA%/amml/instances"
+'''
+run = '''
+set -e
+[ -n "$LOCALAPPDATA" ] || { echo "LOCALAPPDATA is not set; the instances live under %LOCALAPPDATA%/amml/instances"; exit 1; }
+instance="$LOCALAPPDATA/amml/instances/${usage_instance:-1.26.62.01-durability-ping}"
+[ -f "$instance/Minecraft.Windows.exe" ] || { echo "no instance at $instance"; exit 1; }
+target="$instance/mods/amml/@amml/durability-ping"
+mkdir -p "$target"
+cp -r dist/@amml/durability-ping/. "$target/"
+echo "installed dist/@amml/durability-ping -> $target"
+'''
+
+[tasks.make-instance]
+description = "Makes the dedicated test instance 1.26.62.01-durability-ping from 1.26.62.01 (copy only; the source is never written): no mods, logs or cache, the loader and recipes of ../amml-durability-ping, the mod manager, and its own data dir. Refuses when the target exists unless --refresh, which only rebuilds the loader and replaces the recipes"
+dir = "{{config_root}}"
+shell = "bash -c"
+usage = '''
+flag "--refresh" help="Repeat only the loader build and the recipes copy on an existing instance"
+'''
+run = '''
+set -e
+[ -n "$LOCALAPPDATA" ] || { echo "LOCALAPPDATA is not set; the instances live under %LOCALAPPDATA%/amml/instances"; exit 1; }
+root="$LOCALAPPDATA/amml/instances"
+source="$root/1.26.62.01"
+target="$root/1.26.62.01-durability-ping"
+amml_repo="$(cd ../amml-durability-ping && pwd)"
+[ -f "$source/Minecraft.Windows.exe" ] || { echo "no source instance at $source"; exit 1; }
+if [ -e "$target" ] && [ -z "$usage_refresh" ]; then
+  echo "$target exists; pass --refresh to rebuild the loader and recipes, or delete it first"
+  exit 1
+fi
+if [ -z "$usage_refresh" ]; then
+  # robocopy exits 0-7 on success
+  rc=0
+  robocopy "$(cygpath -w "$source")" "$(cygpath -w "$target")" //E //NFL //NDL //NJH //NJS //NP //XD "$(cygpath -w "$source/mods")" "$(cygpath -w "$source/logs")" "$(cygpath -w "$source/amml/cache")" "$(cygpath -w "$source/amml/logs")" || rc=$?
+  [ "$rc" -lt 8 ] || { echo "robocopy failed with exit $rc"; exit 1; }
+else
+  [ -f "$target/Minecraft.Windows.exe" ] || { echo "no instance to refresh at $target"; exit 1; }
+fi
+(cd "$amml_repo" && cargo build -p amml-loader --release)
+cp "$amml_repo/target/release/amml.dll" "$target/amml.dll"
+rm -rf "$target/amml/recipes"
+mkdir -p "$target/amml"
+cp -r "$amml_repo/recipes" "$target/amml/recipes"
+if [ -z "$usage_refresh" ]; then
+  mkdir -p "$target/mods/amml/@amml"
+  cp -r "$source/mods/amml/@amml/modmanager" "$target/mods/amml/@amml/modmanager"
+  data_dir="$(cygpath -m "$LOCALAPPDATA")/amml/data-durability-ping"
+  printf 'data_dir = "%s"\n' "$data_dir" > "$target/amml/instance.hcl"
+fi
+echo "$target"
+'''
+
+[tasks.ingame]
+description = "Runs install on the 1.26.62.01-durability-ping instance, starts its Minecraft.Windows.exe, waits up to 180 s for '@amml/durability-ping enabled' in the instance's amml/logs, fails on a durability-ping line with off, missing, error or panic (except 'features off: none'), ends only the process it started and prints the lines of the run"
+dir = "{{config_root}}"
+shell = "bash -c"
+run = '''
+set -e
+instance="$LOCALAPPDATA/amml/instances/1.26.62.01-durability-ping"
+logs="$instance/amml/logs"
+finder="$(cygpath -w "$(cd ../amml-durability-ping && pwd)/scripts/find-game-pid.ps1")"
+mise run install --instance 1.26.62.01-durability-ping
+mkdir -p "$logs"
+mod_logs() { find "$logs" -type f -name '*durability-ping*' 2> /dev/null; }
+ps_find() { powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$finder" "$@" | tr -d '\r'; }
+# a log from an earlier run must not satisfy this one
+for f in $(mod_logs); do rm -f "$f"; done
+before=" $(tasklist //FO CSV //NH //FI "IMAGENAME eq Minecraft.Windows.exe" | grep -o '^"Minecraft.Windows.exe","[0-9]*"' | grep -o '[0-9]*"$' | tr -d '"' | tr '\n' ' ')"
+game_pid=""
+game_created=""
+end_game() {
+  if [ -n "$game_pid" ] && ps_find -Folder "$(cygpath -w "$instance")" -ProcessId "$game_pid" -Created "$game_created" > /dev/null 2>&1; then
+    taskkill //PID "$game_pid" //F > /dev/null 2>&1 || true
+  fi
+  game_pid=""
+}
+trap end_game EXIT
+(cd "$instance" && ./Minecraft.Windows.exe > /dev/null 2>&1) &
+started=$(date +%s)
+outcome="timeout"
+while [ $(( $(date +%s) - started )) -lt 180 ]; do
+  if [ -z "$game_pid" ]; then
+    found=$(ps_find -Folder "$(cygpath -w "$instance")" -Before "$before" 2> /dev/null | head -n 1 || true)
+    if [ -n "$found" ]; then game_pid="${found%% *}"; game_created="${found#* }"; fi
+  fi
+  lines=""
+  for f in $(mod_logs); do lines="$lines
+$(cat "$f")"; done
+  if echo "$lines" | grep -v "features off: none" | grep -iE "durability-ping.*(off|missing|error|panic)" > /dev/null; then outcome="bad line"; break; fi
+  if echo "$lines" | grep -q "@amml/durability-ping enabled"; then outcome="enabled"; break; fi
+  if [ -z "$game_pid" ] && [ $(( $(date +%s) - started )) -ge 30 ]; then outcome="game did not start"; break; fi
+  sleep 2
+done
+echo "waited $(( $(date +%s) - started )) s: $outcome"
+end_game
+for f in $(mod_logs); do echo "--- $f"; cat "$f"; done
+[ "$outcome" = "enabled" ]
+'''
