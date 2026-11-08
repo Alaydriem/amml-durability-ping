@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  MISE_TRUSTED_CONFIG_PATHS: ${{ github.workspace }}/durability-ping
+
+defaults:
+  run:
+    working-directory: durability-ping
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: durability-ping
+
+      - uses: jdx/mise-action@v2
+        with:
+          working_directory: durability-ping
+
+      - uses: taiki-e/install-action@nextest
+
+      - uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            durability-ping/target
+          key: cargo-${{ hashFiles('durability-ping/Cargo.lock', 'durability-ping/rust-toolchain.toml') }}
+          restore-keys: |
+            cargo-
+
+      - run: mise run check
+      - run: mise run test
+      - run: mise run package
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: amml-durability-ping-${{ github.sha }}-windows-x64
+          path: durability-ping/dist/@amml/durability-ping/

@@ -56,7 +56,7 @@ echo "installed dist/@amml/durability-ping -> $target"
 '''
 
 [tasks.make-instance]
-description = "Makes the dedicated test instance 1.26.62.01-durability-ping from 1.26.62.01 (copy only; the source is never written): no mods, logs or cache, the loader and recipes of ../amml-durability-ping, the mod manager, and its own data dir. Refuses when the target exists unless --refresh, which only rebuilds the loader and replaces the recipes"
+description = "Makes the dedicated test instance 1.26.62.01-durability-ping from 1.26.62.01 (copy only; the source is never written): no mods, logs or cache, the loader and recipes of ../amml, the mod manager, and its own data dir. Refuses when the target exists unless --refresh, which only rebuilds the loader and replaces the recipes"
 dir = "{{config_root}}"
 shell = "bash -c"
 usage = '''
@@ -68,7 +68,7 @@ set -e
 root="$LOCALAPPDATA/amml/instances"
 source="$root/1.26.62.01"
 target="$root/1.26.62.01-durability-ping"
-amml_repo="$(cd ../amml-durability-ping && pwd)"
+amml_repo="$(cd ../amml && pwd)"
 [ -f "$source/Minecraft.Windows.exe" ] || { echo "no source instance at $source"; exit 1; }
 if [ -e "$target" ] && [ -z "$usage_refresh" ]; then
   echo "$target exists; pass --refresh to rebuild the loader and recipes, or delete it first"
@@ -104,7 +104,7 @@ run = '''
 set -e
 instance="$LOCALAPPDATA/amml/instances/1.26.62.01-durability-ping"
 logs="$instance/amml/logs"
-finder="$(cygpath -w "$(cd ../amml-durability-ping && pwd)/scripts/find-game-pid.ps1")"
+finder="$(cygpath -w "$(cd ../amml && pwd)/scripts/find-game-pid.ps1")"
 mise run install --instance 1.26.62.01-durability-ping
 mkdir -p "$logs"
 mod_logs() { find "$logs" -type f -name '*durability-ping*' 2> /dev/null; }
