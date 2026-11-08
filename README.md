@@ -62,15 +62,6 @@ For tests in the game, use a dedicated instance, not your normal one. `mise run 
 
 The game functions the mod reads and hooks are found by AMML recipes in the `amml` repository (`recipes/`).
 
-### Temporary SDK patch
-
-Until `amml` releases the new entries (the held item reader and the tool hooks), the workspace `Cargo.toml` has a `[patch."https://github.com/Alaydriem/amml.git"]` block. It points `amml-sdk` and `amml-game` to the local worktree `../amml-durability-ping`. Do not publish the mod with this patch. To remove it:
-
-1. Tag `amml` with the release that holds the new entries.
-2. Delete the `[patch]` block and pin `amml-sdk` and `amml-game` to that tag.
-3. Set `amml_version` in `durability-ping/amml/amml.hcl` to that release. With an older loader the mod loads, but the alert and the guard stay off.
-4. Run `mise run check`, `mise run test` and `mise run ingame`.
-
 ## License
 
 BSD 3-Clause. Copyright (c) 2026 Charles R. Portwood II. See [LICENSE](./LICENSE).
