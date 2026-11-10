@@ -16,7 +16,7 @@ A tone when the tool in your hand is low on durability, and an optional guard th
 
 Client-side only. The tones are made by the mod, so it ships no sound files.
 
-## Usage
+## Features
 
 - **Alert** (on by default). One tone plays when a tool goes below the alert limit, or the first time you hold a low tool. Switching back to a tool you were already warned about is silent. The tone plays again only after the tool is repaired above the limit. While a menu or the loading screen shows, the tone waits until the screen closes.
 - **Guard** (off by default). A tool below the guard limit does not work: no mining, no hits, no bow or fishing rod, and no tool use on a block (hoe, axe, shovel, flint and steel, shears). A low tone plays at most once a second while you try. A right-click on a chest, door, lever or crafting table still works.

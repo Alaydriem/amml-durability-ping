@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["durability-ping/core", "durability-ping/amml"]
+members = ["src/core", "src/amml"]
 
 [workspace.package]
 version = "26.62.0"
@@ -20,7 +20,7 @@ curia = "=0.2.2"
 hcl-rs = "=0.19.8"
 rodio = "=0.22.2"
 serde = { version = "1.0.229", features = ["derive"] }
-durability-ping-core = { path = "durability-ping/core" }
+durability-ping-core = { path = "src/core" }
 
 [workspace.lints.clippy]
 unwrap_used = "deny"

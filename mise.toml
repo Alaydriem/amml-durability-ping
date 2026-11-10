@@ -31,23 +31,24 @@ cargo build --release -p durability-ping-amml
 rm -rf dist/@amml/durability-ping
 mkdir -p dist/@amml/durability-ping
 cp target/release/amml_durability_ping.dll dist/@amml/durability-ping/amml_durability_ping.dll
-cp durability-ping/amml/amml.hcl dist/@amml/durability-ping/amml.hcl
-cp durability-ping/amml/icon.png dist/@amml/durability-ping/icon.png
+cp src/amml/amml.hcl dist/@amml/durability-ping/amml.hcl
+cp src/amml/icon.png dist/@amml/durability-ping/icon.png
+if find dist -name '*.pdb' | grep -q .; then echo "a .pdb is in dist/; debug symbols are never shipped"; exit 1; fi
 echo "built dist/@amml/durability-ping"
 '''
 
 [tasks.install]
-description = "Runs package, then copies dist/@amml/durability-ping into mods/amml/@amml/durability-ping of an AMML instance under %LOCALAPPDATA%/amml/instances (--instance, default 1.26.62.01-durability-ping). The mod's config/ stays. Close the game first: a running game locks the DLL"
+description = "Runs package, then copies dist/@amml/durability-ping into mods/amml/@amml/durability-ping of an AMML instance under %LOCALAPPDATA%/amml/instances (--instance, required). The mod's config/ stays. Close the game first: a running game locks the DLL"
 depends = ["package"]
 dir = "{{config_root}}"
 shell = "bash -c"
 usage = '''
-flag "--instance <name>" default="1.26.62.01-durability-ping" help="The instance folder under %LOCALAPPDATA%/amml/instances"
+flag "--instance <name>" required=#true help="The instance folder under %LOCALAPPDATA%/amml/instances"
 '''
 run = '''
 set -e
 [ -n "$LOCALAPPDATA" ] || { echo "LOCALAPPDATA is not set; the instances live under %LOCALAPPDATA%/amml/instances"; exit 1; }
-instance="$LOCALAPPDATA/amml/instances/${usage_instance:-1.26.62.01-durability-ping}"
+instance="$LOCALAPPDATA/amml/instances/${usage_instance:?--instance is required}"
 [ -f "$instance/Minecraft.Windows.exe" ] || { echo "no instance at $instance"; exit 1; }
 target="$instance/mods/amml/@amml/durability-ping"
 mkdir -p "$target"
