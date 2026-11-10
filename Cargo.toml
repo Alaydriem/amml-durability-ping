@@ -11,11 +11,11 @@ license = "BSD-3-Clause"
 publish = false
 
 [workspace.dependencies]
-amm-abi = { git = "https://github.com/Alaydriem/amml-modmanager.git", tag = "26.62.0" }
-amm-client = { git = "https://github.com/Alaydriem/amml-modmanager.git", tag = "26.62.0", default-features = false }
-amm-core = { git = "https://github.com/Alaydriem/amml-modmanager.git", tag = "26.62.0" }
-amml-sdk = { git = "https://github.com/Alaydriem/amml.git", tag = "26.62.0" }
-amml-game = { git = "https://github.com/Alaydriem/amml.git", tag = "26.62.0" }
+amm-abi = { git = "https://github.com/Alaydriem/amml-modmanager.git", tag = "26.63.3" }
+amm-client = { git = "https://github.com/Alaydriem/amml-modmanager.git", tag = "26.63.3", default-features = false }
+amm-core = { git = "https://github.com/Alaydriem/amml-modmanager.git", tag = "26.63.3" }
+amml-sdk = { git = "https://github.com/Alaydriem/amml.git", tag = "26.63.3" }
+amml-game = { git = "https://github.com/Alaydriem/amml.git", tag = "26.63.3" }
 curia = "=0.2.2"
 hcl-rs = "=0.19.8"
 rodio = "=0.22.2"
@@ -25,8 +25,3 @@ durability-ping-core = { path = "src/core" }
 [workspace.lints.clippy]
 unwrap_used = "deny"
 expect_used = "deny"
-
-# TEMPORARY (spec section 7 step 0): build against the local SDK until the operator tags amml.
-[patch."https://github.com/Alaydriem/amml.git"]
-amml-sdk = { path = "../amml-durability-ping/sdk/sdk" }
-amml-game = { path = "../amml-durability-ping/sdk/game" }
