@@ -387,7 +387,7 @@ dependencies = [
 
 [[package]]
 name = "durability-ping-amml"
-version = "26.62.0"
+version = "26.63.4"
 dependencies = [
  "amm-abi",
  "amm-client",
@@ -403,7 +403,7 @@ dependencies = [
 
 [[package]]
 name = "durability-ping-core"
-version = "26.62.0"
+version = "26.63.4"
 
 [[package]]
 name = "encoding_rs"
