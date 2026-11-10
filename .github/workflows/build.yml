@@ -44,4 +44,4 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: amml-durability-ping-${{ github.sha }}-windows-x64
-          path: durability-ping/dist/@amml/durability-ping/
+          path: durability-ping/dist/@alaydriem/durability-ping/

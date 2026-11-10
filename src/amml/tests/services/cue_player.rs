@@ -1,5 +1,5 @@
 use crate::support::FakeOutput;
-use amml_durability_ping::CuePlayer;
+use alaydriem_durability_ping::CuePlayer;
 use durability_ping_core::audio::Cue;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
@@ -87,7 +87,7 @@ fn stop_joins() {
 
 #[test]
 fn device_lost_flag_marks_and_resets() {
-    let lost = amml_durability_ping::DeviceLost::default();
+    let lost = alaydriem_durability_ping::DeviceLost::default();
     let callback_copy = lost.clone();
     assert!(!lost.is_lost());
     callback_copy.mark();

@@ -1,4 +1,4 @@
-use amml_durability_ping::services::SettingsReader;
+use alaydriem_durability_ping::services::SettingsReader;
 use durability_ping_core::config::{AlertConfig, BlockConfig, PingConfig};
 use durability_ping_core::structs::Limit;
 

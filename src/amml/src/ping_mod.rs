@@ -25,7 +25,7 @@ pub struct PingMod;
 
 impl PingMod {
     // the id as the module string the loader and the hook host take; a test checks it against the namespace and name
-    pub const MODULE: &'static str = "@amml/durability-ping";
+    pub const MODULE: &'static str = "@alaydriem/durability-ping";
     pub const UPDATE: &'static str = "ClientInstance.update";
     pub const GET_LOCAL_PLAYER: &'static str = "ClientInstance.getLocalPlayer";
     pub const PLAYER_INVENTORY: &'static str = "Player.playerInventory";
@@ -164,7 +164,7 @@ impl PingMod {
 }
 
 impl AmmlMod for PingMod {
-    const NAMESPACE: &'static str = "amml";
+    const NAMESPACE: &'static str = "alaydriem";
     const NAME: &'static str = "durability-ping";
 
     // the audio thread does not start here: load runs under the loader lock
@@ -177,8 +177,8 @@ impl AmmlMod for PingMod {
     fn enable(api: &Api) -> Result<(), SdkError> {
         let runtime = PingRuntime::get().ok_or_else(|| SdkError::Mod("load did not run".to_string()))?;
         Self::enable_with(&AmmlHost::new(api, Self::MODULE), runtime)?;
-        Logger::new(api, Self::MODULE).info("@amml/durability-ping enabled");
-        runtime.note_startup(curia::Level::Info, "@amml/durability-ping enabled");
+        Logger::new(api, Self::MODULE).info("@alaydriem/durability-ping enabled");
+        runtime.note_startup(curia::Level::Info, "@alaydriem/durability-ping enabled");
         Ok(())
     }
 

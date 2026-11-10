@@ -1,9 +1,9 @@
 use std::path::Path;
 
+use alaydriem_durability_ping::PingMod;
+use alaydriem_durability_ping::services::PingRuntime;
 use amm_abi::types::AmmLogLevel;
 use amm_client::test_support::FakeTable;
-use amml_durability_ping::PingMod;
-use amml_durability_ping::services::PingRuntime;
 use amml_game::EntryId;
 use amml_sdk::{AmmlMod, SdkError};
 

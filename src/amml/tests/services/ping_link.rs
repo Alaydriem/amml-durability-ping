@@ -1,8 +1,8 @@
 use std::path::Path;
 
+use alaydriem_durability_ping::services::PingLink;
 use amm_client::test_support::FakeTable;
 use amm_core::structs::event::{KeybindPhase, ModEvent};
-use amml_durability_ping::services::PingLink;
 use durability_ping_core::config::PingConfig;
 
 #[test]

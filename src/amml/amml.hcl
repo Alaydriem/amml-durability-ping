@@ -1,6 +1,6 @@
-namespace   = "amml"
+namespace   = "alaydriem"
 name        = "durability-ping"
-entry       = "amml_durability_ping.dll"
+entry       = "alaydriem_durability_ping.dll"
 api_version = 2
 amml_version = "26.62.0"
 entries = [

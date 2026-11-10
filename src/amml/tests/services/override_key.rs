@@ -1,5 +1,5 @@
+use alaydriem_durability_ping::services::{OverrideKey, PingLink};
 use amm_core::structs::event::{KeybindPhase, ModEvent};
-use amml_durability_ping::services::{OverrideKey, PingLink};
 
 fn keybind(action: u16, phase: KeybindPhase) -> ModEvent {
     ModEvent::Keybind { action, phase }

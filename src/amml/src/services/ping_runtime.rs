@@ -151,7 +151,7 @@ impl PingRuntime {
                 *self.config.lock().unwrap_or_else(PoisonError::into_inner) = *link.config();
                 let active = Active { link, tracker: AlertTracker::new(), key: OverrideKey::default() };
                 *self.active.lock().unwrap_or_else(PoisonError::into_inner) = Some(active);
-                curia::info!("@amml/durability-ping attached to the mod manager");
+                curia::info!("@alaydriem/durability-ping attached to the mod manager");
                 self.send_startup_lines();
                 LinkState::Attached
             }
@@ -329,17 +329,17 @@ impl PingRuntime {
         let unsupported = LinkError::from(AmmStatus::Unsupported);
         match error {
             LinkError::ManagerMissing | LinkError::AbiMismatch { .. } => {
-                runtime.logger().error("@amml/durability-ping needs @amml/modmanager 0.2.x; the alert is off");
+                runtime.logger().error("@alaydriem/durability-ping needs @amml/modmanager 0.2.x; the alert is off");
             }
             other if *other == unsupported => {
                 runtime
                     .logger()
-                    .warn("@amml/modmanager is too old for @amml/durability-ping; update it. The alert is off");
+                    .warn("@amml/modmanager is too old for @alaydriem/durability-ping; update it. The alert is off");
             }
             other => {
                 runtime
                     .logger()
-                    .error(&format!("@amml/modmanager refused @amml/durability-ping ({other}); the alert is off"));
+                    .error(&format!("@amml/modmanager refused @alaydriem/durability-ping ({other}); the alert is off"));
             }
         }
     }

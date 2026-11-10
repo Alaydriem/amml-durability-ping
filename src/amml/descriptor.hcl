@@ -1,4 +1,4 @@
-namespace    = "amml"
+namespace    = "alaydriem"
 name         = "durability-ping"
 display_name = "Durability Ping"
 version      = "26.62.0"

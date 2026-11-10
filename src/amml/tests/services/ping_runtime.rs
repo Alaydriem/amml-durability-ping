@@ -1,10 +1,10 @@
 use std::path::Path;
 use std::time::Duration;
 
+use alaydriem_durability_ping::services::{PingLink, PingRuntime};
+use alaydriem_durability_ping::types::LinkState;
 use amm_client::test_support::FakeTable;
 use amm_core::structs::event::{KeybindPhase, ModEvent};
-use amml_durability_ping::services::{PingLink, PingRuntime};
-use amml_durability_ping::types::LinkState;
 use durability_ping_core::audio::Cue;
 
 use crate::support::FakeOutput;

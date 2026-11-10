@@ -30,7 +30,7 @@ Install it with the [AMML launcher](https://github.com/alaydriem/amml/releases/l
 
 ## Configuration
 
-Settings are in the mod manager panel (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F10</kbd>) and saved to `mods/amml/@amml/durability-ping/config/config.hcl`. Changes apply at once.
+Settings are in the mod manager panel (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F10</kbd>) and saved to `mods/amml/@alaydriem/durability-ping/config/config.hcl`. Changes apply at once.
 
 | Setting | Default | Description |
 | --- | --- | --- |

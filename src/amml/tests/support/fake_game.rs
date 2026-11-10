@@ -1,6 +1,6 @@
 use std::cell::{Cell, RefCell};
 
-use amml_durability_ping::traits::GameView;
+use alaydriem_durability_ping::traits::GameView;
 use durability_ping_core::structs::ToolReading;
 
 // a stand-in for the game: the test sets whether a player exists and what the player holds

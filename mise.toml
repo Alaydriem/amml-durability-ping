@@ -22,23 +22,23 @@ dir = "{{config_root}}"
 run = "cargo nextest run --workspace"
 
 [tasks.package]
-description = "Builds dist/@amml/durability-ping/ (amml_durability_ping.dll, amml.hcl, icon.png), the release artifact"
+description = "Builds dist/@alaydriem/durability-ping/ (alaydriem_durability_ping.dll, amml.hcl, icon.png), the release artifact"
 dir = "{{config_root}}"
 shell = "bash -c"
 run = '''
 set -e
 cargo build --release -p durability-ping-amml
-rm -rf dist/@amml/durability-ping
-mkdir -p dist/@amml/durability-ping
-cp target/release/amml_durability_ping.dll dist/@amml/durability-ping/amml_durability_ping.dll
-cp src/amml/amml.hcl dist/@amml/durability-ping/amml.hcl
-cp src/amml/icon.png dist/@amml/durability-ping/icon.png
+rm -rf dist/@alaydriem/durability-ping
+mkdir -p dist/@alaydriem/durability-ping
+cp target/release/alaydriem_durability_ping.dll dist/@alaydriem/durability-ping/alaydriem_durability_ping.dll
+cp src/amml/amml.hcl dist/@alaydriem/durability-ping/amml.hcl
+cp src/amml/icon.png dist/@alaydriem/durability-ping/icon.png
 if find dist -name '*.pdb' | grep -q .; then echo "a .pdb is in dist/; debug symbols are never shipped"; exit 1; fi
-echo "built dist/@amml/durability-ping"
+echo "built dist/@alaydriem/durability-ping"
 '''
 
 [tasks.install]
-description = "Runs package, then copies dist/@amml/durability-ping into mods/amml/@amml/durability-ping of an AMML instance under %LOCALAPPDATA%/amml/instances (--instance, required). The mod's config/ stays. Close the game first: a running game locks the DLL"
+description = "Runs package, then copies dist/@alaydriem/durability-ping into mods/amml/@alaydriem/durability-ping of an AMML instance under %LOCALAPPDATA%/amml/instances (--instance, required). The mod's config/ stays. Close the game first: a running game locks the DLL"
 depends = ["package"]
 dir = "{{config_root}}"
 shell = "bash -c"
@@ -50,10 +50,10 @@ set -e
 [ -n "$LOCALAPPDATA" ] || { echo "LOCALAPPDATA is not set; the instances live under %LOCALAPPDATA%/amml/instances"; exit 1; }
 instance="$LOCALAPPDATA/amml/instances/${usage_instance:?--instance is required}"
 [ -f "$instance/Minecraft.Windows.exe" ] || { echo "no instance at $instance"; exit 1; }
-target="$instance/mods/amml/@amml/durability-ping"
+target="$instance/mods/amml/@alaydriem/durability-ping"
 mkdir -p "$target"
-cp -r dist/@amml/durability-ping/. "$target/"
-echo "installed dist/@amml/durability-ping -> $target"
+cp -r dist/@alaydriem/durability-ping/. "$target/"
+echo "installed dist/@alaydriem/durability-ping -> $target"
 '''
 
 [tasks.make-instance]
@@ -98,7 +98,7 @@ echo "$target"
 '''
 
 [tasks.ingame]
-description = "Runs install on the 1.26.62.01-durability-ping instance, starts its Minecraft.Windows.exe, waits up to 180 s for '@amml/durability-ping enabled' in the instance's amml/logs, fails on a durability-ping line with off, missing, error or panic (except 'features off: none'), ends only the process it started and prints the lines of the run"
+description = "Runs install on the 1.26.62.01-durability-ping instance, starts its Minecraft.Windows.exe, waits up to 180 s for '@alaydriem/durability-ping enabled' in the instance's amml/logs, fails on a durability-ping line with off, missing, error or panic (except 'features off: none'), ends only the process it started and prints the lines of the run"
 dir = "{{config_root}}"
 shell = "bash -c"
 run = '''
@@ -134,7 +134,7 @@ while [ $(( $(date +%s) - started )) -lt 180 ]; do
   for f in $(mod_logs); do lines="$lines
 $(cat "$f")"; done
   if echo "$lines" | grep -v "features off: none" | grep -iE "durability-ping.*(off|missing|error|panic)" > /dev/null; then outcome="bad line"; break; fi
-  if echo "$lines" | grep -q "@amml/durability-ping enabled"; then outcome="enabled"; break; fi
+  if echo "$lines" | grep -q "@alaydriem/durability-ping enabled"; then outcome="enabled"; break; fi
   if [ -z "$game_pid" ] && [ $(( $(date +%s) - started )) -ge 30 ]; then outcome="game did not start"; break; fi
   sleep 2
 done

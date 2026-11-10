@@ -1,4 +1,4 @@
-//! @amml/durability-ping as an AMML mod: a tone when the held tool is low, and an optional guard before it breaks.
+//! @alaydriem/durability-ping as an AMML mod: a tone when the held tool is low, and an optional guard before it breaks.
 
 #![deny(unsafe_code)]
 

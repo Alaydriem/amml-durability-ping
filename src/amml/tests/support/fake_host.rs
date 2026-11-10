@@ -1,8 +1,8 @@
 use std::cell::RefCell;
 use std::collections::BTreeMap;
 
-use amml_durability_ping::traits::GameHost;
-use amml_durability_ping::types::HookSpec;
+use alaydriem_durability_ping::traits::GameHost;
+use alaydriem_durability_ping::types::HookSpec;
 use amml_sdk::{HookHandle, SdkError};
 
 // a loader stand-in: entries it knows resolve, the rest are missing; hooks are recorded, never installed

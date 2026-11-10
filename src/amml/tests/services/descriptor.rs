@@ -1,8 +1,8 @@
+use alaydriem_durability_ping::services::{PingDescriptor, SettingsReader};
 use amm_core::services::DescriptorChecker;
 use amm_core::services::settings::{ChordText, SchemaChecker};
 use amm_core::structs::descriptor::{Capability, ClaimMode, Descriptor, FieldKind, KeyScope};
 use amm_core::structs::settings::HclDocument;
-use amml_durability_ping::services::{PingDescriptor, SettingsReader};
 use durability_ping_core::config::PingConfig;
 
 fn descriptor() -> Descriptor {
@@ -13,9 +13,9 @@ fn descriptor() -> Descriptor {
 fn descriptor_passes_manager_checker() {
     let descriptor = descriptor();
 
-    assert_eq!(descriptor.namespace, "amml");
+    assert_eq!(descriptor.namespace, "alaydriem");
     assert_eq!(descriptor.name, "durability-ping");
-    assert_eq!(descriptor.id(), "@amml/durability-ping");
+    assert_eq!(descriptor.id(), "@alaydriem/durability-ping");
     let claims: Vec<_> = descriptor.claims.iter().map(|claim| (claim.capability, claim.mode)).collect();
     assert_eq!(claims, [(Capability::Input, ClaimMode::Shared)]);
     let keybinds: Vec<_> = descriptor

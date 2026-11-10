@@ -9,7 +9,7 @@ publish.workspace = true
 autotests = false
 
 [lib]
-name = "amml_durability_ping"
+name = "alaydriem_durability_ping"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]

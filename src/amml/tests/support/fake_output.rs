@@ -1,4 +1,4 @@
-use amml_durability_ping::CueOutput;
+use alaydriem_durability_ping::CueOutput;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
