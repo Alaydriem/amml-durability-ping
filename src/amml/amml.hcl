@@ -1,26 +1,90 @@
 namespace   = "alaydriem"
 name        = "durability-ping"
 entry       = "alaydriem_durability_ping.dll"
-api_version = 2
-amml_version = "26.62.0"
-entries = [
-  "ClientInstance.update",
-  "ClientInstance.getLocalPlayer",
-  "Player.playerInventory",
-  "FillingContainer.mItems",
-  "ItemStackBase.getDamageValue",
-  "Item.getMaxDamage",
-  "Item.mFullName",
-  "ClientInstance.isShowingMenu",
-  "GameMode.vtable",
-  "GameMode.mPlayer",
-  "GameMode.startDestroyBlock",
-  "GameMode.continueDestroyBlock",
-  "GameMode.useItem",
-  "GameMode.attack",
-  "SurvivalMode.vtable",
-  "Item.useOn",
-]
+api_version = 3
+
+uses {
+  feature "alert" {
+    event "client.tick" {
+      version  = 1
+      required = true
+    }
+    event "world.left" {
+      version  = 1
+      required = true
+    }
+    event "registry.provider_ready" {
+      version  = 1
+      required = true
+    }
+    event "registry.provider_gone" {
+      version  = 1
+      required = true
+    }
+    area "client.read" {
+      version  = 1
+      required = true
+    }
+    area "inventory.read" {
+      version  = 1
+      required = true
+    }
+    event "mods.loaded" {
+      version  = 1
+      required = true
+    }
+    event "input.lease_suspended" {
+      version  = 1
+      required = true
+    }
+    event "input.lease_resumed" {
+      version  = 1
+      required = true
+    }
+    event "input.lease_lost" {
+      version  = 1
+      required = true
+    }
+    event "input.injected_released" {
+      version  = 2
+      required = true
+    }
+    event "overlay.screenshot_taken" {
+      version  = 1
+      required = true
+    }
+    event "overlay.screenshot_written" {
+      version  = 1
+      required = true
+    }
+    area "input.lease" {
+      version  = 1
+      required = true
+    }
+  }
+  feature "guard" {
+    event "player.block_break_start" {
+      version  = 1
+      required = true
+    }
+    event "player.block_break_continue" {
+      version  = 1
+      required = true
+    }
+    event "player.item_use" {
+      version  = 1
+      required = true
+    }
+    event "player.attack" {
+      version  = 1
+      required = true
+    }
+    event "player.item_use_on_block" {
+      version  = 1
+      required = true
+    }
+  }
+}
 
 listing {
   title       = "Durability Ping"
